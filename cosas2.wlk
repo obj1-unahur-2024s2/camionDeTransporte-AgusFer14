@@ -4,6 +4,10 @@ object knightRider {
 
     method peligrosidad() = 10
 
+    method bultos() = 1 
+
+    method consecuenciaDeCarga() {}
+
 }
 
 object bumblebee {
@@ -25,6 +29,10 @@ object bumblebee {
     }
 
     method estaEnModoAuto() = modoAuto
+
+    method bultos() = 2
+
+    method consecuenciaDeCarga() {self.cambiarARobot()}
     
 }
 
@@ -35,6 +43,12 @@ object paqueteDeLadrillos {
 
     method peligrosidad() = 2
 
+    method bultos() = if(cantidad.between(1, 100)) {1} 
+        else if(cantidad.between(101, 300)) {2}
+        else {3}
+
+    method consecuenciaDeCarga() {cantidad += 12}
+
 }
 
 object arena {
@@ -42,10 +56,14 @@ object arena {
 
     method peligrosidad() = 1
 
+    method bultos() = 1
+
+    method consecuenciaDeCarga() {peso = 0.max(peso - 10)}
+
 }
 
 object bateriaAntiaerea {
-    var property tieneMisiles = true
+    var property tieneMisiles = false
 
     method peso() = if(tieneMisiles){300} else{200}
 
@@ -56,6 +74,10 @@ object bateriaAntiaerea {
             0
         }
     }
+
+    method bultos() = if(tieneMisiles) 2 else 1 
+
+    method consecuenciaDeCarga() {self.tieneMisiles(true)}
 
 }
 
@@ -68,7 +90,11 @@ object contenedor {
     method peso() = 100 + cosas.sum({c => c.peso()})
 
     method peligrosidad() = if(cosas.isEmpty()) 0 
-        else cosas.max({c => c.peligrosidad()}).peligrosidad() 
+        else cosas.max({c => c.peligrosidad()}).peligrosidad()
+
+    method bultos() = 1 + cosas.sum({c => c.bultos()}) 
+
+    method consecuenciaDeCarga() {cosas.forEach({c => c.consecuenciaDeCarga()})}
 
 }
 
@@ -76,6 +102,10 @@ object residuosRadioactivos {
     var property peso = 0
 
     method peligrosidad() = 200
+
+    method bultos() = 1
+
+    method consecuenciaDeCarga() {peso += 15}
 
 }
 
@@ -85,5 +115,9 @@ object embalajeDeSeguridad {
     method peso() = envuelveA.peso()
 
     method peligrosidad() = envuelveA.peligrosidad() / 2
+
+    method bultos() = 2
+
+    method consecuenciaDeCarga() {}
 
 }

@@ -1,9 +1,12 @@
 object camion {
     const carga = [] 
 
-    method cargar1CosaDelCamion(cosa) = carga.add(cosa)
-
-    method cargarVariasCosas(listaDeCosas) {carga.addAll(listaDeCosas)}
+    method cargar(cosa) { carga.add(cosa)  
+        cosa.consecuenciaDeCarga()
+    }
+    method cargarVariasCosas(listaDeCosas) {carga.addAll(listaDeCosas)
+        listaDeCosas.forEach({c => c.consecuenciaDeCarga()})
+    }
 
     method descargar1CosaDelCamion(cosa) = carga.remove(cosa)
 
